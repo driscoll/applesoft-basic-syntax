@@ -1,0 +1,116 @@
+%YAML 1.2
+---
+name: Applesoft BASIC
+file_extensions: [bas]
+scope: source.bas
+
+contexts:
+  main:
+    - match: (^\d+ |:)
+      scope: line.basic
+      captures:
+        1: line.number.basic
+      push: statement
+
+  statement:
+    - match: \b(REM)\b
+      push: comment
+
+    - match: \b(CLEAR|LET|DIM|DEF FN)\b
+      scope: keyword.variable-control.basic
+
+    - match: \b(GOTO|GOSUB|RETURN|ON|POP|FOR|NEXT|IF|THEN|END|STOP)\b
+      scope: keyword.flow-control.basic
+
+    - match: \b(ONERR|RESUME)\b
+      scope: keyword.error-handling.basic
+
+    - match: \b(PRINT|INPUT|GET|HOME|HTAB|VTAB|INVERSE|FLASH|NORMAL|TEXT)\b
+      scope: keyword.text-io.basic
+
+    - match: \b(GR|PLOT|HLIN|VLIN|AT)
+      scope: keyword.lores-graphics.basic
+
+    - match: \b(COLOR=)
+      scope: keyword.lores-graphics.basic
+      
+    - match: \b(HGR|HGR2|HPLOT|TO)\b
+      scope: keyword.hires-graphics.basic
+
+    - match: \b(HCOLOR=)
+      scope: keyword.hires-graphics.basic
+      
+    - match: \b(DATA|READ|RESTORE)\b
+      scope: keyword.inline-data.basic 
+
+    - match: \b(TRACE|NOTRACE)\b
+      scope: keyword.miscellaneous.basic 
+
+    - match: \b(ROT=|SCALE=|DRAW|XDRAW)\b
+      scope: keyword.hires-shape-tables.basic 
+
+    - match: \b(CONT|DEL|LIST|NEW|RUN)\b
+      scope: keyword.interpreter-program-state.basic 
+
+    - match: \b(HIMEM|IN#|LOMEM|WAIT)\b
+      scope: keyword.native-platform-interaction.basic 
+
+    - match: \b(LOAD|RECALL|SAVE|STORE|SHLOAD)\b
+      scope: keyword.cassette-tape.basic 
+
+    - match: \b(SPEED=|POKE|CALL|PR#)\b
+      scope: keyword.compatibility-shims.basic 
+
+    - match: \b(ABS|ATN|COS|EXP|INT|LOG|RND|SGN|SIN|SQR|TAN)\b
+      scope: function.numeric.basic
+
+    - match: \b(LEN|LEFT\$|MID\$|RIGHT\$)\(
+      scope: function.string.basic
+      push: arguments
+
+    - match: \b(ASC|CHR\$|STR\$|VAL)\(
+      scope: function.type-conversion.basic
+      push: arguments
+
+    - match: \b(FRE|PDL|POS|SCRN|USR)\(
+      scope: function.system-interaction.basic
+      push: arguments
+
+    - match: \bFN (\w*)\(
+      scope: function.user-defined.basic
+      push: arguments
+
+    - match: \bPEEK\(
+      scope: function.compatibility-shims.basic 
+      push: arguments
+
+    - match: (=|\<|\>|\<=|=\<|\>=|=\>|\<\>|\>\<)
+      scope: operator.comparison.basic 
+
+    - match: \b(AND|OR|NOT)\b
+      scope: operator.boolean.basic 
+
+    - match: (\^|\*|\/|\+|-)
+      scope: operator.arithmetic.basic 
+
+    - match: '"'
+      push: string 
+
+  arguments:
+    - meta_scope: function.arguments.basic
+    - match: '"'
+      push: string
+    - match: \)
+      pop: true
+
+  string:
+    - meta_scope: string.quoted.double.basic 
+    - match: \\.
+      scope: constant.character.escape.basic 
+    - match: '"'
+      pop: true
+
+  comment:
+    - meta_scope: comment.basic
+    - match: $
+      pop: true
