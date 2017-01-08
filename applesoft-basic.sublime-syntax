@@ -19,7 +19,7 @@ contexts:
     - match: \b(CLEAR|LET|DIM|DEF FN)\b
       scope: keyword.variable-control.basic
 
-    - match: \b(GOTO|GOSUB|RETURN|ON|POP|FOR|NEXT|IF|THEN|END|STOP)\b
+    - match: \b(GOTO|GOSUB|RETURN|ON|POP|FOR|NEXT|IF|THEN|STEP|END|STOP)\b
       scope: keyword.flow-control.basic
 
     - match: \b(ONERR|RESUME)\b
